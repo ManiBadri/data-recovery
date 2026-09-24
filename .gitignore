@@ -1,0 +1,28 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python bytecode / cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Generated / test artifacts
+test.img
+MBR.bmp
+
+# Environment variables / secrets
+.env
+.env.*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
