@@ -26,13 +26,13 @@ def read_bytes():
     while True:
     
             my_bytes = input("Enter byte number: or x to exit: ")
-            my_bytes = my_bytes.split(",")
-            my_bytes = [int(x) for x in my_bytes]
-            print((int(my_bytes[0])).to_bytes(2, byteorder='big') + b" to " + (int(my_bytes[1])).to_bytes(2, byteorder='big'))
+            #my_bytes = [int(x) for x in my_bytes]
+            #print((int(my_bytes[0])).to_bytes(2, byteorder='big') + b" to " + (int(my_bytes[1])).to_bytes(2, byteorder='big'))
     
             if my_bytes == "x":
                 break
             with open("test.img", "rb") as image:
                 data = image.read()
             data = bytearray(data)
-            print(data[int(my_bytes[0]):int(my_bytes[1])].decode("utf-8", errors="ignore"))  # Print the first 10 bytes as a sample
+            my_bytes = int(my_bytes)
+            print(data[int(my_bytes*2):int(my_bytes*2)+2].decode("utf-8", errors="ignore"))  # Print the first 10 bytes as a sample
