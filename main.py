@@ -3,14 +3,22 @@ import img_maker
 import img_reader
 
 
-while True:
-    action = input("Enter action (read/write): ")
+#Color codes
+CRED = '\033[31m'
+CGREEN = '\033[32m'
+CYELLOW = '\033[33m'
+CBLUE = '\033[34m'
+CEND = '\033[0m'
 
-    if action == "write":
+
+while True:
+    action = input("Enter action ([1]read [2]write "  + CRED + "[3]exit): " + CEND)
+
+    if action == "2":
         img_maker.create_image()
-    elif action == "read":
-        img_reader.read_boot_sector()
-        action = input("Enter read action [(1)MBR] [(2)sector] [(3)hex] [(4)back]: ")
+    elif action == "1":
+        img_reader.read_partition_info()
+        action = input("Enter read action ([1]MBR [2]sector [3]hex "  + CRED + "[4]back): "+ CEND)
         if action == "1":
             img_reader.read_MBR()
         elif action == "2":
@@ -19,4 +27,6 @@ while True:
             img_reader.read_bytes()
         elif action == "4":
             continue
+    else:
+        break
             
