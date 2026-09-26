@@ -35,5 +35,6 @@ while True:
         elif action == "4":
             continue
     else:
+        terminal_utils.clear_terminal()
         break
             
