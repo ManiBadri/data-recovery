@@ -103,61 +103,33 @@ def read_partition_info():
 
         print(CYELLOW + "START HEAD:  " + CEND + str(start_head))
         
-            
-            
-        start_cylinder = data[int(partition_offset + START_CYLINDER_OFFSET):int(partition_offset + START_CYLINDER_OFFSET) + 4 ]
+        #start sector and cyl
+        start_sector_byte = data[partition_offset + START_SECTOR_OFFSET : partition_offset + START_SECTOR_OFFSET + 2]
+        start_cylinder_byte = data[partition_offset + START_CYLINDER_OFFSET : partition_offset + START_CYLINDER_OFFSET + 2]
         
-        start_cylinder = bytes.fromhex(start_cylinder)
-        
-        start_cylinder = int.from_bytes(start_cylinder, byteorder='big')
-        
-        start_cylinder = start_cylinder >> 6
-        
-        print(CYELLOW + "START CYLINDER:  " + CEND + str(start_cylinder))
-            
-            
-            
-            
-        start_sector = data[int(partition_offset + START_SECTOR_OFFSET):int(partition_offset + START_SECTOR_OFFSET) + 2]
-                
-        start_sector = bytes.fromhex(start_sector)
-        
-        start_sector = int.from_bytes(start_sector, byteorder='big')
-        
-        start_sector = start_sector >> 2
-        
-        print(CYELLOW + "START SECTOR:  " + CEND + str(start_sector))
-        
-        
-        
-        end_head = data[int(partition_offset + END_HEAD_OFFSET):int(partition_offset + END_HEAD_OFFSET) + 2]
-                
-        end_head = bytes.fromhex(end_head)
+        start_sector_byte = int(start_sector_byte, 16)
+        start_cylinder_byte = int(start_cylinder_byte, 16)
+        start_cylinder_sector_byte = int(data[partition_offset + START_SECTOR_OFFSET : partition_offset + START_SECTOR_OFFSET + 2], 16,)
 
-        end_head = int.from_bytes(end_head, byteorder='little')
-        print(CYELLOW + "END HEAD:  " + CEND + str(end_head))
-        
-        #end sector
-        end_sector = data[int(partition_offset + END_SECTOR_OFFSET):int(partition_offset + END_SECTOR_OFFSET) + 2]
-                
-        end_sector = bytes.fromhex(end_sector)
+        start_sector = start_sector_byte & 0x3F
+        start_cylinder = ((start_cylinder_sector_byte & 0xC0) << 2) | start_cylinder_byte
 
-        end_sector = int.from_bytes(end_sector, byteorder='big')
+        print(CYELLOW + "START SECTOR: "  + CEND , start_sector)
+        print(CYELLOW + "START CYLINDER: "+ CEND , start_cylinder)
         
-        end_sector = end_sector >> 2
         
-        print(CYELLOW + "END SECTOR:  " + CEND + str(end_head))
-                
-        #end cylinder        
-        end_cylinder = data[int(partition_offset + END_CYLINDER_OFFSET):int(partition_offset + END_CYLINDER_OFFSET) + 4]
-                
-        end_cylinder = bytes.fromhex(end_cylinder)
+        end_sector_byte = data[partition_offset + END_SECTOR_OFFSET : partition_offset + END_SECTOR_OFFSET + 2]
+        end_cylinder_byte = data[partition_offset + END_CYLINDER_OFFSET : partition_offset + END_CYLINDER_OFFSET + 2]
+        
+        end_sector_byte = int(end_sector_byte, 16)
+        end_cylinder_byte = int(end_cylinder_byte, 16)
+        end_cylinder_sector_byte = int(data[partition_offset + END_SECTOR_OFFSET : partition_offset + END_SECTOR_OFFSET + 2], 16,)
 
-        end_cylinder = int.from_bytes(end_cylinder, byteorder='big')
-        
-        end_cylinder = end_cylinder >> 6
-        
-        print(CYELLOW + "END CYLINDER:  " + CEND + str(end_cylinder))        
+        end_sector = end_sector_byte & 0x3F
+        end_cylinder = ((end_cylinder_sector_byte & 0xC0) << 2) | end_cylinder_byte
+
+        print(CYELLOW + "END SECTOR: " + CEND, end_sector)
+        print(CYELLOW + "END CYLINDER:" + CEND, end_cylinder)
         
         
         
@@ -167,8 +139,6 @@ def read_partition_info():
         
         relative_sector = int.from_bytes(relative_sector, byteorder='little')
         print(CYELLOW + "RELATIVE SECTOR:  " + CEND + str(relative_sector))
-        
-        
         
         
         
