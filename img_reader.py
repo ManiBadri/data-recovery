@@ -52,10 +52,17 @@ def read_bytes():
         print(data[int(my_bytes*2):int(my_bytes*2)+2].decode("utf-8", errors="ignore")) 
 
 
-
-
-
-
+def get_data(data, partition_offset, offset, length):
+    
+    value = data[int(partition_offset + offset):int(partition_offset + offset) + length]
+                    
+    value = bytes.fromhex(value)
+    
+    value = int.from_bytes(value, byteorder='little')
+    
+    return str(value)
+            
+    
 
 def read_partition_info():
     with open("test.img", "rb") as image:
@@ -95,13 +102,9 @@ def read_partition_info():
             
             
             
-        start_head = data[int(partition_offset + START_HEAD_OFFSET):int(partition_offset + START_HEAD_OFFSET) + 2 ]
-                
-        start_head = bytes.fromhex(start_head)
+        #start head
+        print(CYELLOW + "START HEAD:  " + CEND + get_data(data, partition_offset, START_HEAD_OFFSET, 2))
         
-        start_head = int.from_bytes(start_head, byteorder='little')
-
-        print(CYELLOW + "START HEAD:  " + CEND + str(start_head))
         
         #start sector and cyl
         start_sector_byte = data[partition_offset + START_SECTOR_OFFSET : partition_offset + START_SECTOR_OFFSET + 2]
@@ -131,23 +134,10 @@ def read_partition_info():
         print(CYELLOW + "END SECTOR: " + CEND, end_sector)
         print(CYELLOW + "END CYLINDER:" + CEND, end_cylinder)
         
+        #relative sector
+        print(CYELLOW + "RELATIVE SECTOR:  " + CEND + get_data(data, partition_offset, RELATIVE_SECTOR_OFFSET, DWORD))
         
-        
-        relative_sector = data[int(partition_offset + RELATIVE_SECTOR_OFFSET):int(partition_offset + RELATIVE_SECTOR_OFFSET) + DWORD]
-        
-        relative_sector = bytes.fromhex(relative_sector)
-        
-        relative_sector = int.from_bytes(relative_sector, byteorder='little')
-        print(CYELLOW + "RELATIVE SECTOR:  " + CEND + str(relative_sector))
-        
-        
-        
-        total_sector = data[int(partition_offset + TOTAL_SECTOR_OFFSET):int(partition_offset + TOTAL_SECTOR_OFFSET) + DWORD]
-                
-        total_sector = bytes.fromhex(total_sector)
-
-        total_sector = int.from_bytes(total_sector, byteorder='little')
-        print(CYELLOW + "TOTAL SECTORS:  " + CEND + str(total_sector))
-        
+        #total sectors
+        print(CYELLOW + "TOTAL SECTORS:  " + CEND + get_data(data, partition_offset, TOTAL_SECTOR_OFFSET, DWORD))
         
         
