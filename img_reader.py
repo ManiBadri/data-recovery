@@ -68,7 +68,7 @@ def read_partition_info():
     with open("test.img", "rb") as image:
         data = image.read()
     data = bytearray(data)
-    print(SIZE)
+    print("total size: ", SIZE)
     
     for partition_offset in PARTITION_OFFSET:
     
