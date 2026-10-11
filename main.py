@@ -14,25 +14,29 @@ CEND = '\033[0m'
 
 while True:
     terminal_utils.clear_terminal()
-    action = input("Enter action ([1]read [2]write "  + CRED + "[3]exit): " + CEND)
+    action = input("Enter action ([1]decode MBR [2]write "  + CRED + "[3]exit): " + CEND)
 
     if action == "2":
         terminal_utils.clear_terminal()
         img_maker.create_image()
     elif action == "1":
         terminal_utils.clear_terminal()
-        img_reader.read_partition_info()
-        action = input("Enter read action ([1]MBR [2]sector [3]hex "  + CRED + "[4]back): "+ CEND)
+        img_reader.decode_MBR()
+        action = input("Select Partition boot sector ([1]Partition 1 [2]Partition 2 [3]Partition 3 [4]Partition 4 [Q]back): "+ CEND)
         if action == "1":
             terminal_utils.clear_terminal()
-            img_reader.read_MBR()
+            img_reader.select_boot_sector(1)
         elif action == "2":
             terminal_utils.clear_terminal()
-            img_reader.read_sector()
+            img_reader.select_boot_sector(2)
         elif action == "3":
             terminal_utils.clear_terminal()
-            img_reader.read_bytes()
+            img_reader.select_boot_sector(3)
         elif action == "4":
+            terminal_utils.clear_terminal()
+            img_reader.select_boot_sector(4)
+        elif action == "Q" or action == "q":
+            terminal_utils.clear_terminal()
             continue
     else:
         terminal_utils.clear_terminal()
