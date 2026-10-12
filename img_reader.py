@@ -25,6 +25,8 @@ END_CYLINDER_OFFSET = 7 * 2
 RELATIVE_SECTOR_OFFSET = 8 * 2
 TOTAL_SECTOR_OFFSET = 12 * 2
 
+partition = {}
+
 class Partition:
     def __init__(self, bootable, system_type, start_head, start_sector, start_cylinder, end_head, end_sector, end_cylinder, relative_sector, total_sectors):
         self.bootable = bootable
@@ -83,7 +85,6 @@ def decode_MBR():
     data = bytearray(data)
     print("total size: ", SIZE)
 
-    partition = {}
     
 
     for partition_number, partition_offset in enumerate(PARTITION_OFFSET, start=1):
@@ -178,11 +179,14 @@ def decode_MBR():
         
         
         
-        
+#relative sector is the starting sector of the partition, which is also the boot sector for that partition
 def select_boot_sector(partition_number):
     if partition_number < 1 or partition_number > 4:
         print("Invalid partition number. Please select a number between 1 and 4.")
         return None
-    return PARTITION_OFFSET[partition_number - 1]
+    sector_offset = int(partition[partition_number].relative_sector) * 512
+    with open("test.img", "rb") as image:
+        image.seek(sector_offset)
+        data = image.read(512)
+    return data.decode("utf-8", errors="ignore")
 
-        
